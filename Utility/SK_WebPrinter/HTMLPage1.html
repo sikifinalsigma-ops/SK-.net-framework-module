@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="zh‑CN">
+<head>
+    <meta charset="utf‑8" />
+    <title>打印模板</title>
+    <style>
+        body {
+            font-family: "SimSun", 宋体;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin‑top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #222;
+            padding: 7px 8px;
+        }
+
+        .title {
+            text‑align: center;
+            font‑size: 18px;
+            font‑weight: bold;
+            margin‑bottom: 15px;
+        }
+
+        .no‑split {
+            break‑inside: avoid !important;
+        }
+
+        /* =========打印专用样式========= */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 12mm;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="title">{ReportTitle}</div>
+    <div>日期：{PrintDate}</div>
+    <table>
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>产品名称</th>
+                <th>数量</th>
+                <th>备注</th>
+            </tr>
+        </thead>
+        <tbody>
+            {TableBodyRows}
+        </tbody>
+    </table>
+</body>
+</html>

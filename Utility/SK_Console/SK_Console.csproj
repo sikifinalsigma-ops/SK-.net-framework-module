@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{895BEC5A-6050-4621-B8C5-9CC485F06AEF}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>SK_Console</RootNamespace>
+    <AssemblyName>SK_Console</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Test.cs" />
+    <Compile Include="TestEncrypt.cs" />
+    <Compile Include="TestEntity.cs" />
+    <Compile Include="TestPrinter.cs" />
+    <Compile Include="TestProtocol.cs" />
+    <Compile Include="TestTool.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="Template2.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Server.csproj">
+      <Project>{3a137fca-578e-4260-90bb-bacda006bbf8}</Project>
+      <Name>Server</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SK_DataAccess\SK_DataAccess.csproj">
+      <Project>{cac3a37a-a421-4cda-9610-3dc1a7745538}</Project>
+      <Name>SK_DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SK_DataEntity\SK_DataEntity.csproj">
+      <Project>{37a89073-7f99-457b-9efd-f974d620c84c}</Project>
+      <Name>SK_DataEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SK_Encrypt\SK_Encrypt.csproj">
+      <Project>{be02ed56-2e65-4518-8be9-aaae387fc32a}</Project>
+      <Name>SK_Encrypt</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SK_Excel\SK_Excel.csproj">
+      <Project>{e2531a01-3abb-4f48-809e-1a98dbee0be7}</Project>
+      <Name>SK_Excel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SK_FileStream\SK_FileStream.csproj">
+      <Project>{f58f2e56-2038-473f-afa6-774ec8e7777d}</Project>
+      <Name>SK_FileStream</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SK_Log\SK_Log.csproj">
+      <Project>{d85e421b-9dc0-43de-a56a-d9947963aee4}</Project>
+      <Name>SK_Log</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SK_Protocol\SK_Protocol.csproj">
+      <Project>{641479EC-DEBE-45FF-AA7C-79B7E053768B}</Project>
+      <Name>SK_Protocol</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SK_Redis\SK_Redis.csproj">
+      <Project>{86e946d2-ca73-489e-bd4f-c31eb07cb574}</Project>
+      <Name>SK_Redis</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SK_Task\SK_Task.csproj">
+      <Project>{fd96480c-4af2-48fe-8e37-34dde1f9814c}</Project>
+      <Name>SK_Task</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SK_Tool\SK_Tool.csproj">
+      <Project>{4f0fd4aa-42f0-4d97-99a7-f37e254d5f28}</Project>
+      <Name>SK_Tool</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SK_WebPrinter\SK_WebPrinter.csproj">
+      <Project>{a4afc8a0-e7e8-44d5-83b1-cb66b577d64a}</Project>
+      <Name>SK_WebPrinter</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
