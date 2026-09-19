@@ -31,8 +31,8 @@ namespace SK_Console
 
                 //TestExcel.test();
                 //TestTool.test();
-                //TestEntity.test();
-                TestEntity.generate();
+                TestEntity.test();
+                //TestEntity.generate();
                 //TestEncrypt.Test();
                 //await TestProtocol.test();
                 //await TestPrinter.test();

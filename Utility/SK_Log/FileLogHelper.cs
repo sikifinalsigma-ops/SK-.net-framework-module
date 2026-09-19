@@ -3,6 +3,8 @@ using Serilog.Events;
 using Serilog.Context;
 using System;
 using System.IO;
+using System.Diagnostics;
+using System.Threading;
 
 namespace SaveLog
 {
@@ -10,7 +12,8 @@ namespace SaveLog
     {
         private static bool _initialized = false;
         private static readonly object _lock = new object();
-
+        private static ILogger logger;
+        private static int _isClosed = 0;
         /// <summary>
         /// 初始化（可手动调用，也可自动触发）
         /// </summary>
@@ -26,7 +29,7 @@ namespace SaveLog
                 string baseDir = AppDomain.CurrentDomain.BaseDirectory;
                 string logPath = Path.Combine(baseDir, "FileLog", "log-.txt");
 
-                Log.Logger = new LoggerConfiguration()
+                logger = new LoggerConfiguration()
                     .MinimumLevel.Debug()
                     .Enrich.FromLogContext()
                     // Console（开发用）
@@ -35,10 +38,10 @@ namespace SaveLog
                         path: logPath,
                         rollingInterval: RollingInterval.Day,
                         retainedFileCountLimit: 7,
-                        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] [{TraceId}] {Message}{NewLine}{Exception}"
+                        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] [{TraceId}] {Message:lj}{NewLine}{Exception}"
                     ))
                     .CreateLogger();
-
+                AppDomain.CurrentDomain.ProcessExit += (s, e) => Close();
                 _initialized = true;
             }
         }
@@ -100,16 +103,16 @@ namespace SaveLog
                 if (ex != null)
                 {
                     if (data != null)
-                        Log.Write(level, ex, "{Message} {@Data}", message, data);
+                        logger.Write(level, ex, "{LogMessage} {@Data}", message, data);
                     else
-                        Log.Write(level, ex, "{Message}", message);
+                        logger.Write(level, ex, "{LogMessage}", message);
                 }
                 else
                 {
                     if (data != null)
-                        Log.Write(level, "{Message} {@Data}", message, data);
+                        logger.Write(level, "{LogMessage} {@Data}", message, data);
                     else
-                        Log.Write(level, "{Message}", message);
+                        logger.Write(level, "{LogMessage}", message);
                 }
             }
         }
@@ -130,15 +133,28 @@ namespace SaveLog
         /// </summary>
         private static string GetTraceId()
         {
-            return Guid.NewGuid().ToString("N");
+            // 兼容 .NET 运行时原生 Activity (W3C TraceContext)
+            // 如果是在 ASP.NET Core 或启用了 OpenTelemetry 的环境中，可以直接拿到请求链的 TraceId
+            var currentTraceId = Activity.Current?.TraceId.ToString();
+            if (!string.IsNullOrEmpty(currentTraceId))
+            {
+                return currentTraceId;
+            }
+
+            // 纯单机离线任务场景：如果无调用链，使用 "-" 保持占位对齐，避免日志中充满无效的独立 GUID
+            return "-";
         }
 
         /// <summary>
-        /// 程序结束时调用（可选）
+        /// 程序退出前务必调用，刷出异步缓冲区并释放资源
         /// </summary>
         public static void Close()
         {
-            Log.CloseAndFlush();
+            // 防止 ProcessExit 与手动调用发生并发冲突
+            if (Interlocked.Exchange(ref _isClosed, 1) == 0)
+            {
+                (logger as IDisposable)?.Dispose();
+            }
         }
     }
 }

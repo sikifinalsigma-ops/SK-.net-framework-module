@@ -1,5 +1,4 @@
 ﻿using MySql.Data.MySqlClient;
-using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,16 +7,18 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SK_DataAccess
 {
-    public class OracleRepository : IDatabase, IDisposable
+    public class MySqlRepository : IDatabase, IDisposable
     {
-        private OracleDbContext context;
+        private MySqlDbContext context;
 
-        public OracleRepository(string connectionString)
+        public MySqlRepository(string connectionString)
         {
-            context = new OracleDbContext(connectionString);
+            context = new MySqlDbContext(connectionString);
         }
 
         public IQueryable<T> Query<T>() where T : class
@@ -28,7 +29,7 @@ namespace SK_DataAccess
         public IQueryable<T> QueryNoTracking<T>() where T : class
         {
             return context.Set<T>().AsNoTracking();
-        }        
+        }
 
         public int InsertAndSaveEntity<T>(T entity) where T : class
         {
@@ -121,7 +122,7 @@ namespace SK_DataAccess
                             break;
                     }
                 }
-                throw ;
+                throw;
             }
 
         }
@@ -157,7 +158,7 @@ namespace SK_DataAccess
             dbSet.Remove(entity);
         }
 
-        public void ExecuteInTransaction(Action<OracleRepository> operation)
+        public void ExecuteInTransaction(Action<MySqlRepository> operation)
         {
             using (var transaction = context.Database.BeginTransaction())
             {
@@ -198,7 +199,7 @@ namespace SK_DataAccess
         {
             var dataTable = new DataTable();
 
-            var connection = (OracleConnection)context.Database.Connection;
+            var connection = (MySqlConnection)context.Database.Connection;
             var shouldClose = false;
 
             try
@@ -216,7 +217,7 @@ namespace SK_DataAccess
                     command.CommandType = CommandType.Text;
                     if (context.Database.CurrentTransaction != null)
                     {
-                        command.Transaction = (OracleTransaction)context.Database.CurrentTransaction.UnderlyingTransaction;
+                        command.Transaction = (MySqlTransaction)context.Database.CurrentTransaction.UnderlyingTransaction;
                     }
 
                     if (oracleParameters != null && oracleParameters.Length > 0)
@@ -224,7 +225,7 @@ namespace SK_DataAccess
                         command.Parameters.AddRange(oracleParameters);
                     }
 
-                    using (var adapter = new OracleDataAdapter((OracleCommand)command))
+                    using (var adapter = new MySqlDataAdapter((MySqlCommand)command))
                     {
                         adapter.Fill(dataTable);
                     }
@@ -249,23 +250,6 @@ namespace SK_DataAccess
         public void Dispose()
         {
             context?.Dispose();
-        }
-
-    }
-
-    public static class OracleParameterFactory
-    {
-        public static DbParameter Create(string name, object value)
-        {
-            return new OracleParameter(name, value);
-        }
-    }
-
-    public static class MySqlParameterFactory
-    {
-        public static DbParameter Create(string name, object value)
-        {
-            return new MySqlParameter(name, value);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Serilog;
 using System;
+using System.IO;
 
 namespace SaveLog
 {
@@ -7,32 +8,33 @@ namespace SaveLog
     {
         public static void CreateSink()
         {
-            Log.Logger = new LoggerConfiguration().MinimumLevel.Information().Enrich.FromLogContext().WriteTo.Async(a => a.File(AppContext.BaseDirectory + "Log\\SaveLogs\\" + DateTime.Now.ToString("yyyyMMdd") + "\\infolog-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}{NewLine}")).CreateLogger();
+            string logPath = Path.Combine(AppContext.BaseDirectory, "Log", "SaveLogs", "infolog-.txt");
+            Log.Logger = new LoggerConfiguration().MinimumLevel.Information().Enrich.FromLogContext().WriteTo.Async(a => a.File(logPath, rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}{NewLine}")).CreateLogger();
         }
 
         public static void SaveLog(string log) 
         {
-            Log.Logger.Information(log,Environment.NewLine);
+            Log.Logger.Information(log);
         }
 
         public static void SaveLog(object log)
         {
-            Log.Logger.Information("record log {@Log}",log, Environment.NewLine);
+            Log.Logger.Information("record log {@Log}",log);
         }
 
         public static void SaveLog<T0, T1, T2>(string messageTemplate, T0 propertyValue0, T1 propertyValue1, T2 propertyValue2)
         {
-            Log.Logger.Information(messageTemplate, propertyValue0, propertyValue1, propertyValue2,Environment.NewLine);
+            Log.Logger.Information(messageTemplate, propertyValue0, propertyValue1, propertyValue2);
         }
 
         public static void SaveException(Exception exception, string messageTemplate)
         {
-            Log.Logger.Error(exception,messageTemplate, Environment.NewLine);
+            Log.Logger.Error(exception,messageTemplate);
         }
 
         public static void SaveException(Exception exception, string messageTemplate, params object[] propertyValues)
         {
-            Log.Logger.Error(exception, messageTemplate, propertyValues, Environment.NewLine);
+            Log.Logger.Error(exception, messageTemplate, propertyValues);
             
         }
 

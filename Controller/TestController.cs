@@ -12,6 +12,7 @@ using SK_DataAccess;
 using WY_DataEntity.Entity;
 using Newtonsoft.Json.Linq;
 using System.Web;
+using ServerUtility;
 
 namespace WebApi.Controllers
 {
@@ -110,7 +111,7 @@ namespace WebApi.Controllers
                 throw e;
             }
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public IEnumerable<string> Get4()
         {
@@ -128,7 +129,7 @@ namespace WebApi.Controllers
             }
             catch (Exception e)
             {
-                StaticSink.SaveLog(e.Message + " " + e.StackTrace);
+                FileLogHelper.Error(e);
                 throw e;
             }
         }
@@ -192,6 +193,9 @@ namespace WebApi.Controllers
         public string MainIntro()
         {
             string ip = ((HttpContextWrapper)Request.Properties["MS_HttpContext"]).Request.UserHostAddress;
+
+            // 调用封装的方法
+            string clientIp = RequestExtensions.GetClientIp(Request);
             FileLogHelper.Info(ip);
             return "akkk";
         }
