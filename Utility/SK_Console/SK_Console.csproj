@@ -37,6 +37,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,6 +53,7 @@
     <Compile Include="TestEntity.cs" />
     <Compile Include="TestPrinter.cs" />
     <Compile Include="TestProtocol.cs" />
+    <Compile Include="TestQrCode.cs" />
     <Compile Include="TestTool.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +94,10 @@
     <ProjectReference Include="..\SK_Protocol\SK_Protocol.csproj">
       <Project>{641479EC-DEBE-45FF-AA7C-79B7E053768B}</Project>
       <Name>SK_Protocol</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SK_QRcode\SK_QRcode.csproj">
+      <Project>{bc10797d-34a2-482c-94a4-7ac858f6c5c2}</Project>
+      <Name>SK_QRcode</Name>
     </ProjectReference>
     <ProjectReference Include="..\SK_Redis\SK_Redis.csproj">
       <Project>{86e946d2-ca73-489e-bd4f-c31eb07cb574}</Project>

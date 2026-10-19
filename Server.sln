@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SK_Protocol", "Utility\SK_P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SK_WebPrinter", "Utility\SK_WebPrinter\SK_WebPrinter.csproj", "{A4AFC8A0-E7E8-44D5-83B1-CB66B577D64A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SK_QRcode", "Utility\SK_QRcode\SK_QRcode.csproj", "{BC10797D-34A2-482C-94A4-7AC858F6C5C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +125,10 @@ Global
 		{A4AFC8A0-E7E8-44D5-83B1-CB66B577D64A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4AFC8A0-E7E8-44D5-83B1-CB66B577D64A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4AFC8A0-E7E8-44D5-83B1-CB66B577D64A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC10797D-34A2-482C-94A4-7AC858F6C5C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC10797D-34A2-482C-94A4-7AC858F6C5C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC10797D-34A2-482C-94A4-7AC858F6C5C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC10797D-34A2-482C-94A4-7AC858F6C5C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

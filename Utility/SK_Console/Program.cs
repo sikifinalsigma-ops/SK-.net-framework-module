@@ -29,9 +29,11 @@ namespace SK_Console
                 //TestRedis.test();
                 //TestServer.test();
 
+                TestQrCode.Test();
+
                 //TestExcel.test();
                 //TestTool.test();
-                TestEntity.test();
+                //TestEntity.test();
                 //TestEntity.generate();
                 //TestEncrypt.Test();
                 //await TestProtocol.test();
