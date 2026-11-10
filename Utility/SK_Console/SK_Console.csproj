@@ -54,6 +54,7 @@
     <Compile Include="TestPrinter.cs" />
     <Compile Include="TestProtocol.cs" />
     <Compile Include="TestQrCode.cs" />
+    <Compile Include="TestServer.cs" />
     <Compile Include="TestTool.cs" />
   </ItemGroup>
   <ItemGroup>

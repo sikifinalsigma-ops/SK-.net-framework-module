@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
@@ -12,12 +13,13 @@ using SK_Redis;
 
 namespace Server.Helper
 {
-    public class JwtHelper
+    public static class JwtHelper
     {
         // 注意：保密密钥长度必须大于等于 256 比特（即至少 32 个字节/字符）
         private static readonly string SecretKey = ConfigurationManager.AppSettings["Jwt_Secret"];
         private static readonly string Issuer = ConfigurationManager.AppSettings["Jwt_Issuer"];     // 签发者
         private static readonly string Audience = ConfigurationManager.AppSettings["Jwt_Audience"]; // 接收者
+        private static readonly int ExpireHours = int.Parse(ConfigurationManager.AppSettings["Jwt_ExpireHours"]); // 接收者
 
         /// <summary>
         /// 生成 JWT Token 字符串
@@ -27,7 +29,7 @@ namespace Server.Helper
         /// <param name="roles">用户角色列表（可选）</param>
         /// <param name="expireMinutes">过期时间，单位：分钟</param>
         /// <returns>返回生成的 JWT Token 签名字符串</returns>
-        public static string CreateToken(string id,string userId, string username, IEnumerable<string> roles = null, int expireMinutes = 60*24)
+        public static string CreateToken(string id,string userId, string username, IEnumerable<string> roles = null, int expireMinutes = 60 * 24)
         {
             // 1. 定义 Payload（载荷）中的 Claims 声明集合
             var claims = new List<Claim>
@@ -78,23 +80,19 @@ namespace Server.Helper
             SK_SYS_USER userEntity = null;
             if (principal != null && principal.Identity != null && principal.Identity.IsAuthenticated)
             {
-                string userId = principal.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
-                RedisCacheHelper cache = new RedisCacheHelper();
-                string userEntityStr = cache.GetString($"login:user:info:{userId}");
+                string userAccount = principal.FindAll(ClaimTypes.NameIdentifier)?.ElementAt(1).Value;
+
+                string userEntityStr = RedisHelper.GetValue($"{ServiceKeySetting.UserRedisPrefix}{userAccount}");
+
                 if (string.IsNullOrEmpty(userEntityStr))
                 {
-                    LoginService ls = new LoginService();
-                    userEntity = ls.GetLoginUser(userId);
-                    string lockKey = $"lock:login:user:{userEntity.USER_ACCOUNT}";
-
-                    if (cache.TryAcquireLock(lockKey, TimeSpan.FromSeconds(5), out IDisposable lockHandle))
-                    {
-                        using (lockHandle)
-                        {
-                            // 缓存用户实体（建议脱敏，避免存入密码哈希）
-                            cache.SetString($"login:user:info:{userEntity.ID}", JsonConvert.SerializeObject(userEntity), TimeSpan.FromDays(1));
-                        }
-                    }
+                    userEntity = LoginService.GetLoginUser(userAccount);
+                    // 缓存用户实体（建议脱敏，避免存入密码哈希）
+                    RedisHelper.SetValue($"{ServiceKeySetting.UserRedisLockPrefix}{userEntity.USER_ACCOUNT}", $"{ServiceKeySetting.UserRedisPrefix}{userEntity.USER_ACCOUNT}", JsonConvert.SerializeObject(userEntity));
+                }
+                else 
+                {
+                    userEntity = JsonConvert.DeserializeObject<SK_SYS_USER>(userEntityStr);
                 }
 
                 return userEntity;

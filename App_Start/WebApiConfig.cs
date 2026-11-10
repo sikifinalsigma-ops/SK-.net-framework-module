@@ -17,14 +17,13 @@ namespace Server
     {
         public static void Register(HttpConfiguration config)
         {
-            /*
-            // Option A: Enable globally for the whole application
-            var cors = new EnableCorsAttribute("https://example.com, https://localhost:3000", "*", "*");
-            config.EnableCors(cors);
-            */
+
+            //CORS Option A: Enable globally for the whole application
+            var cors = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors(cors);            
 
             //CORS
-            config.EnableCors();
+            //config.EnableCors();
 
 
             //filters

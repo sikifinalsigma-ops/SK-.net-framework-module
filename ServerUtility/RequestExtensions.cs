@@ -8,6 +8,12 @@ namespace ServerUtility
 
     public static class RequestExtensions
     {
+
+        /// <summary>
+        /// 获取登录客户端IP
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public static string GetClientIp(HttpRequestMessage request)
         {
             // 1. 优先尝试从 X-Forwarded-For 读取 (格式可能是: "client_ip, proxy1_ip, proxy2_ip")

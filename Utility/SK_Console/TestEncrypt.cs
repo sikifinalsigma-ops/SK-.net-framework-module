@@ -8,7 +8,8 @@ namespace SK_Console
     {
         public static void Test()
         {
-            string aaa = Sha256EncryptionHelper.StringTo32ByteKey("123456");
+            string aaa = Sha256EncryptionHelper.StringTo32ByteKey("cyberdragonnova");
+
             string bcryaaa = BCryptEncryptionHelper.HashPassword(aaa);
 
             string aa = Sha256EncryptionHelper.StringTo32ByteKey("sikifinalsigma");

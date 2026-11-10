@@ -1,4 +1,5 @@
-﻿using SK_DataAccess;
+﻿using Newtonsoft.Json;
+using SK_DataAccess;
 using SK_DataEntity;
 using SK_DataEntity.Entity;
 using SK_Encrypt;
@@ -11,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace ServerService.SysService
 {
-    public class LoginService
+    public static class LoginService
     {        
-        public bool CheckLogin(string userName,string userPwd,out SK_SYS_USER userEntity) 
+        public static bool CheckLogin(string userName,string userPwd,out SK_SYS_USER userEntity) 
         {
             userEntity = null;
             try
@@ -45,13 +46,13 @@ namespace ServerService.SysService
         }
 
 
-        public SK_SYS_USER GetLoginUser(string userName)
+        public static SK_SYS_USER GetLoginUser(string userAccount)
         {
             try
             {
                 using (OracleRepository db = new DatabaseConnect().DbConnect() as OracleRepository)
                 {
-                    SK_SYS_USER user = db.QueryNoTracking<SK_SYS_USER>().Where(x => x.USER_ACCOUNT == userName).FirstOrDefault();
+                    SK_SYS_USER user = db.QueryNoTracking<SK_SYS_USER>().Where(x => x.USER_ACCOUNT == userAccount).FirstOrDefault();
                     return user;
                 }
             }
@@ -65,10 +66,23 @@ namespace ServerService.SysService
             }
         }
 
-        public bool regesterUser(string userName,string userPwd) 
+        public static bool registerUser(string userName,string userPwd) 
         {
             string BCryptCode = BCryptEncryptionHelper.HashPassword(userPwd);
             return false;
         }
+
+        public static bool ChangePassword(SK_SYS_USER userEntity, string newPassword) 
+        {
+            using (OracleRepository db = new DatabaseConnect().DbConnect() as OracleRepository) 
+            {
+                userEntity.USER_PASSWORD = BCryptEncryptionHelper.HashPassword(newPassword);
+                db.UpdateAndSaveEntity(userEntity);
+            }
+            
+            return true;
+        }
+
+        
     }
 }

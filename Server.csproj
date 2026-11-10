@@ -147,7 +147,7 @@
     <Compile Include="Controller\DemoController.cs" />
     <Compile Include="Controller\EntityGeneratorController.cs" />
     <Compile Include="Controller\FileManagementController.cs" />
-    <Compile Include="Controller\SysModule\LoginController.cs" />
+    <Compile Include="Controller\SysModule\UserSignInController.cs" />
     <Compile Include="Controller\TestController.cs" />
     <Compile Include="Filters\Attribute\ApiExceptionAttribute.cs" />
     <Compile Include="Filters\Attribute\JwtAuthorizeAttribute.cs" />
@@ -205,9 +205,7 @@
       <Name>SK_Tool</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controller\WyModule\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

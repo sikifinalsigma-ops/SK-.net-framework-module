@@ -29,7 +29,7 @@ namespace WebApi.Filters
                     HttpStatusCode.BadRequest,
                     new
                     {
-                        message = ex.Message
+                        data = ex.Message
                     });
             }
         }
